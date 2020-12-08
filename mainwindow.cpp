@@ -181,18 +181,35 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionShowToolbar_triggered(bool checked)
 {
-
+    if (checked)
+            mainToolBar->show();
+        else
+            mainToolBar->hide();
 }
 
 
 void MainWindow::on_actionUndo_triggered()
 {
+    saveToReverseHistory(image);
+        image = history.last();
+        refreshLabel();
+        imageLabel->adjustSize();
 
+        history.pop_back();
+        if (history.size() == 0)
+            actionUndo->setEnabled(false);
 }
 
 void MainWindow::on_actionRedo_triggered()
 {
+    saveToHistory(image);
+        image = reverseHistory.last();
+        refreshLabel();
+        imageLabel->adjustSize();
 
+        reverseHistory.pop_back();
+        if (reverseHistory.size() == 0)
+            actionRedo->setEnabled(false);
 }
 
 void MainWindow::on_actionZoomIn_triggered()
