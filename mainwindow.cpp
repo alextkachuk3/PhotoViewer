@@ -47,7 +47,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
+//Adjusts the correct operation after the choice of actions
 bool MainWindow::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched != imageLabel)
@@ -97,13 +97,13 @@ bool MainWindow::eventFilter(QObject* watched, QEvent* event)
 
         return false;
 }
-
+//Crop image buttom
 void MainWindow::on_actionCrop_triggered()
 {
     changeCroppingState(true);
 }
 
-//Enter max window size
+//Enter full screen
 void MainWindow::on_actionFullscreen_triggered()
 {
     if(isFullScreen())
@@ -111,7 +111,7 @@ void MainWindow::on_actionFullscreen_triggered()
     else
         this->setWindowState(Qt::WindowFullScreen);
 }
-
+//Open image, after pressing the button
 void MainWindow::on_actionOpen_triggered()
 {
     QString lastFileName = fileName.isEmpty() ? QDir::currentPath() : fileName;
@@ -138,7 +138,7 @@ void MainWindow::on_actionOpen_triggered()
        }
 }
 
-
+//Paint photo in black shade
 void MainWindow::on_actionPaintBlack_triggered()
 {
     saveToHistoryWithClear(image);
@@ -158,17 +158,17 @@ void MainWindow::on_actionPaintBlack_triggered()
 
         refreshLabel();
 }
-
+//Left rotate 90 degree
 void MainWindow::on_actionRotateLeft_triggered()
 {
-
+     rotateImage(-90);
 }
-
+//Right rotate 90 degree
 void MainWindow::on_actionRotateRight_triggered()
 {
-
+    rotateImage(90);
 }
-
+//Save image
 void MainWindow::on_actionSave_triggered()
 {
     QString imagePath = QFileDialog::getSaveFileName(this,
@@ -187,7 +187,7 @@ void MainWindow::on_actionShowToolbar_triggered(bool checked)
             mainToolBar->hide();
 }
 
-
+//Undo action
 void MainWindow::on_actionUndo_triggered()
 {
     saveToReverseHistory(image);
@@ -199,7 +199,7 @@ void MainWindow::on_actionUndo_triggered()
         if (history.size() == 0)
             actionUndo->setEnabled(false);
 }
-
+//Redo action
 void MainWindow::on_actionRedo_triggered()
 {
     saveToHistory(image);
@@ -211,17 +211,17 @@ void MainWindow::on_actionRedo_triggered()
         if (reverseHistory.size() == 0)
             actionRedo->setEnabled(false);
 }
-
+//Zoom in
 void MainWindow::on_actionZoomIn_triggered()
 {
     scaleImage(1.25);
 }
-
+//Zoom out
 void MainWindow::on_actionZoomOut_triggered()
 {
     scaleImage(0.8);
 }
-
+//Set zoom to default
 void MainWindow::on_actionZoomToFit_triggered()
 {
     QSize windowSize = scrollArea->size();
@@ -242,13 +242,13 @@ void MainWindow::on_actionZoomToFit_triggered()
         double scaleBy = scaleTo / scaleFactor;
         scaleImage(scaleBy);
 }
-
+//Setup scroll bar
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 {
     int newValue = factor * scrollBar->value() + (factor - 1) * scrollBar->pageStep() / 2;
     scrollBar->setValue(newValue);
 }
-
+//Cropping state
 void MainWindow::changeCroppingState(bool changeTo)
 {
     croppingState = changeTo;
@@ -265,6 +265,7 @@ void MainWindow::refreshLabel()
     imageLabel->setPixmap(QPixmap::fromImage(image));
 }
 
+//Rotate image, angle-param of rotate
 void MainWindow::rotateImage(int angle)
 {
     saveToHistoryWithClear(image);
@@ -299,6 +300,7 @@ void MainWindow::saveToReverseHistory(QImage imageToSave)
     actionRedo->setEnabled(true);
 }
 
+//
 void MainWindow::scaleImage(double factor)
 {
     scaleFactor *= factor;
