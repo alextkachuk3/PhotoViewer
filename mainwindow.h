@@ -6,6 +6,8 @@
 #include <QLabel>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QFileDialog>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -75,5 +77,11 @@ private:
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
     void changeCroppingState(bool changeTo);
     void refreshLabel();
+    void rotateImage(int angle);
+    void saveToHistory(QImage imageToSave);
+    void saveToHistoryWithClear(QImage imageToSave);
+    void saveToReverseHistory(QImage imageToSave);
+    void scaleImage(double factor);
+    void updateActions(bool updateTo);
 };
 #endif // MAINWINDOW_H
