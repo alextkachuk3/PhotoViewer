@@ -281,12 +281,14 @@ void MainWindow::rotateImage(int angle)
     imageLabel->adjustSize();
 }
 
+//Save to history
 void MainWindow::saveToHistory(QImage imageToSave)
 {
     history.push_back(imageToSave);
     actionUndo->setEnabled(true);
 }
 
+//Save to history and clear reverse history
 void MainWindow::saveToHistoryWithClear(QImage imageToSave)
 {
     saveToHistory(imageToSave);
@@ -294,13 +296,14 @@ void MainWindow::saveToHistoryWithClear(QImage imageToSave)
     actionRedo->setEnabled(false);
 }
 
+//Save to reverse history
 void MainWindow::saveToReverseHistory(QImage imageToSave)
 {
     reverseHistory.push_back(imageToSave);
     actionRedo->setEnabled(true);
 }
 
-//
+//Scale image
 void MainWindow::scaleImage(double factor)
 {
     scaleFactor *= factor;
