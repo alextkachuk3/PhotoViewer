@@ -8,6 +8,9 @@
 #include <QScrollBar>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDir>
+#include <QMouseEvent>
+#include <QVector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

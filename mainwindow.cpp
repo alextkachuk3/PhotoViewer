@@ -19,6 +19,28 @@ MainWindow::MainWindow(QWidget *parent)
        actionZoomIn = ui->actionZoomIn;
        actionZoomOut = ui->actionZoomOut;
        actionZoomToFit = ui->actionZoomToFit;
+
+       mainToolBar = ui->mainToolBar;
+           statusBar = ui->statusBar;
+
+           updateActions(false);
+           actionUndo->setEnabled(false);
+           actionRedo->setEnabled(false);
+
+           imageLabel = new QLabel;
+           imageLabel->resize(0, 0);
+           imageLabel->setMouseTracking(true);
+           imageLabel->setBackgroundRole(QPalette::Base);
+           imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+           imageLabel->setScaledContents(true);
+           imageLabel->installEventFilter(this);
+
+           scrollArea = new QScrollArea;
+           scrollArea->setBackgroundRole(QPalette::Dark);
+           scrollArea->setWidget(imageLabel);
+           setCentralWidget(scrollArea);
+
+           setWindowTitle(tr("Photo Viewer"));
 }
 
 MainWindow::~MainWindow()
@@ -28,7 +50,52 @@ MainWindow::~MainWindow()
 
 bool MainWindow::eventFilter(QObject* watched, QEvent* event)
 {
+    if (watched != imageLabel)
+            return false;
 
+        switch (event->type())
+        {
+            case QEvent::MouseButtonPress:
+            {
+                if (!croppingState) break;
+                const QMouseEvent* const me = static_cast<const QMouseEvent*>(event);
+                croppingStart = me->pos() / scaleFactor;
+
+                break;
+            }
+
+            case QEvent::MouseButtonRelease:
+            {
+                if (!croppingState) break;
+                saveToHistoryWithClear(image);
+
+                const QMouseEvent* const me = static_cast<const QMouseEvent*>(event);
+                croppingEnd = me->pos() / scaleFactor;
+
+                const QRect rect(croppingStart, croppingEnd);
+                image = image.copy(rect);
+                refreshLabel();
+                imageLabel->adjustSize();
+
+                changeCroppingState(false);
+
+                break;
+            }
+
+            case QEvent::MouseMove:
+            {
+                const QMouseEvent* const me = static_cast<const QMouseEvent*>(event);
+                const QPoint position = me->pos();
+                statusBar->showMessage(QString("(x,y) coordinates: (%1,%2)").arg(position.x()).arg(position.y()));
+
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        return false;
 }
 
 void MainWindow::on_actionCrop_triggered()
@@ -89,7 +156,12 @@ void MainWindow::on_actionRotateRight_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
+    QString imagePath = QFileDialog::getSaveFileName(this,
+                                                         tr("Save File"),
+                                                         "",
+                                                         tr("JPEG (*.jpg *.jpeg);;PNG (*.png)" ));
 
+        image.save(imagePath);
 }
 
 void MainWindow::on_actionShowToolbar_triggered(bool checked)
