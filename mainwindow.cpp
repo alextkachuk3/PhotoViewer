@@ -100,7 +100,7 @@ bool MainWindow::eventFilter(QObject* watched, QEvent* event)
 
 void MainWindow::on_actionCrop_triggered()
 {
-
+    changeCroppingState(true);
 }
 
 //Enter max window size
@@ -141,7 +141,22 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionPaintBlack_triggered()
 {
+    saveToHistoryWithClear(image);
 
+        int width = image.width(), height = image.height();
+
+        QRgb color;
+        int value;
+
+        for (int x = 0; x < width; ++x)
+            for (int y = 0; y < height; ++y)
+            {
+                color = image.pixel(x, y);
+                value = qGray(color);
+                image.setPixel(x, y, qRgb(value, value, value));
+            }
+
+        refreshLabel();
 }
 
 void MainWindow::on_actionRotateLeft_triggered()
