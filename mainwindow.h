@@ -56,6 +56,9 @@ private:
     QVector<QImage> history;
     QVector<QImage> reverseHistory;
 
+    double scaleFactor;
+    bool croppingState;
+
     QAction *actionCrop;
     QAction *actionOpen;
     QAction *actionPaintBlack;
@@ -70,5 +73,7 @@ private:
     QAction *actionZoomToFit;
 
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
+    void changeCroppingState(bool changeTo);
+    void refreshLabel();
 };
 #endif // MAINWINDOW_H

@@ -107,3 +107,19 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
     int newValue = factor * scrollBar->value() + (factor - 1) * scrollBar->pageStep() / 2;
     scrollBar->setValue(newValue);
 }
+
+void MainWindow::changeCroppingState(bool changeTo)
+{
+    croppingState = changeTo;
+    actionCrop->setDisabled(changeTo);
+
+    if (changeTo)
+        setCursor(Qt::CrossCursor);
+    else
+        setCursor(Qt::ArrowCursor);
+}
+
+void MainWindow::refreshLabel()
+{
+    imageLabel->setPixmap(QPixmap::fromImage(image));
+}
