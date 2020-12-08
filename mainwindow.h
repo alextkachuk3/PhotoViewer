@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QVector>
+#include <QLabel>
+#include <QScrollArea>
+#include <QScrollBar>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,5 +38,37 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    QPoint croppingStart;
+    QPoint croppingEnd;
+
+    QLabel *imageLabel;
+
+    QScrollArea *scrollArea;
+
+    QString fileName;
+    QImage image;
+
+    QStatusBar *statusBar;
+
+    QToolBar *mainToolBar;
+
+    QVector<QImage> history;
+    QVector<QImage> reverseHistory;
+
+    QAction *actionCrop;
+    QAction *actionOpen;
+    QAction *actionPaintBlack;
+    QAction *actionRotateLeft;
+    QAction *actionRotateRight;
+    QAction *actionSave;
+    QAction *actionShowToolbar;
+    QAction *actionUndo;
+    QAction *actionRedo;
+    QAction *actionZoomIn;
+    QAction *actionZoomOut;
+    QAction *actionZoomToFit;
+
+    void adjustScrollBar(QScrollBar *scrollBar, double factor);
 };
 #endif // MAINWINDOW_H

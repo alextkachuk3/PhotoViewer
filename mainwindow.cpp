@@ -6,6 +6,19 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    actionCrop = ui->actionCrop;
+       actionPaintBlack = ui->actionPaintBlack;
+       actionOpen = ui->actionOpen;
+       actionRotateLeft = ui->actionRotateLeft;
+       actionRotateRight = ui->actionRotateRight;
+       actionSave = ui->actionSave;
+       actionShowToolbar = ui->actionShowToolbar;
+       actionUndo = ui->actionUndo;
+       actionRedo = ui->actionRedo;
+       actionZoomIn = ui->actionZoomIn;
+       actionZoomOut = ui->actionZoomOut;
+       actionZoomToFit = ui->actionZoomToFit;
 }
 
 MainWindow::~MainWindow()
@@ -89,3 +102,8 @@ void MainWindow::on_actionZoomToFit_triggered()
 
 }
 
+void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
+{
+    int newValue = factor * scrollBar->value() + (factor - 1) * scrollBar->pageStep() / 2;
+    scrollBar->setValue(newValue);
+}
