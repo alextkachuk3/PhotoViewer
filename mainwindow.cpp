@@ -214,17 +214,33 @@ void MainWindow::on_actionRedo_triggered()
 
 void MainWindow::on_actionZoomIn_triggered()
 {
-
+    scaleImage(1.25);
 }
 
 void MainWindow::on_actionZoomOut_triggered()
 {
-
+    scaleImage(0.8);
 }
 
 void MainWindow::on_actionZoomToFit_triggered()
 {
+    QSize windowSize = scrollArea->size();
+        QSize labelSize = imageLabel->pixmap()->size();
 
+        double imageRatio = double(labelSize.height()) / labelSize.width();
+        double scaleTo;
+
+        if (windowSize.width() * imageRatio > windowSize.height())
+        {
+            scaleTo = double(windowSize.height()) / labelSize.height();
+        }
+        else
+        {
+            scaleTo = double(windowSize.width()) / labelSize.width();
+        }
+
+        double scaleBy = scaleTo / scaleFactor;
+        scaleImage(scaleBy);
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
